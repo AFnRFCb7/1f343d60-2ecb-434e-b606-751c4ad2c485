@@ -7,14 +7,16 @@
                     {
                         config-identity ? x : x ,
                         implementation-identity ? x : x ,
-                        lib-identity ? x : x
+                        lib-identity ? x : x ,
+                        pkgs-identity ? x : x
                     } :
                         let
                             implementation =
-                                { config , lib , ... } :
+                                { config , lib , pkgs , ... } :
                                     let
                                         _config = config-identity config ;
                                         _lib = lib-identity lib ;
+                                        _pkgs = pkgs-identity pkgs ;
                                         in
                                             {
                                                 options.trip =
@@ -53,7 +55,7 @@
                                                                 options.failure =
                                                                     _lib.mkOption
                                                                         {
-                                                                            default = value : _pkgs.writeShellApplication { name = "failure" ; runtimeInputs = [ _pkgs.coreutils ] ; text = "echo 9519690907808385 >&2 exit 108" ; } ;
+                                                                            default = value : _pkgs.writeShellApplication { name = "failure" ; text = "echo 9519690907808385 >&2 exit 108" ; } ;
                                                                             type = _lib.types.functionTo _lib.types.package ;
                                                                         } ;
                                                             } ,
