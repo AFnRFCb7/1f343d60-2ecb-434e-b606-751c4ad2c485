@@ -91,15 +91,16 @@
                                                         {
                                                             name = "nixos-test" ;
                                                             nodes.client =
-                                                                { config , ... } :
+                                                                { config , pkgs , ... } :
                                                                     let
                                                                         _config = config-identity config ;
+                                                                        _pkgs = pkgs-identity pkgs ;
                                                                         in
                                                                             {
                                                                                 config.environment.systemPackages =
                                                                                     [
                                                                                         (
-                                                                                            pkgs.writeShellApplication
+                                                                                            _pkgs.writeShellApplication
                                                                                                 {
                                                                                                     name = "test-script" ;
                                                                                                     runtimeInputs = [ ( _config.failure { } ) ] ;
