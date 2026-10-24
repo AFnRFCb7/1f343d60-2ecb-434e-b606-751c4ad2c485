@@ -22,22 +22,17 @@
                                                     _lib.mkOption
                                                         {
                                                             default =
-                                                                { expression , message , uuid } :
-                                                                    let
-                                                                        eval = builtins.tryEval expression ;
-                                                                        in
-                                                                            if eval.success then eval.value
-                                                                            else
-                                                                                builtins.throw
-                                                                                    (
-                                                                                        builtins.toJSON
-                                                                                            (
-                                                                                                config.visitor
-                                                                                                    { default = path : value : { type = builtins.typeOf value ; path = path ; value = builtins.toString value ; } ; }
-                                                                                                    { lambda = path : value : { type = "lambda" ; path = path ; } ; }
-                                                                                                    { uuid = uuid ; message = message ; }
-                                                                                            )
-                                                                                    ) ;
+                                                                { message , uuid } :
+                                                                    builtins.throw
+                                                                        (
+                                                                            builtins.toJSON
+                                                                                (
+                                                                                    config.visitor
+                                                                                        { default = path : value : { type = builtins.typeOf value ; path = path ; value = builtins.toString value ; } ; }
+                                                                                        { lambda = path : value : { type = "lambda" ; path = path ; } ; }
+                                                                                        { uuid = uuid ; message = message ; }
+                                                                                )
+                                                                        ) ;
                                                             type = _lib.types.functionTo _lib.types.anything ;
                                                         } ;
                                             } ;
@@ -76,13 +71,8 @@
                                             obviated-by
                                         } :
                                         {
-                                            expression ,
                                             message ,
                                             uuid
-                                        } :
-                                        {
-                                            success ,
-                                            value
                                         } :
                                             {
                                                 obviated-by = obviated-by ;
@@ -106,11 +96,10 @@
                                                                                                     runtimeInputs = [ ( _config.failure { } ) ] ;
                                                                                                     text =
                                                                                                         let
-                                                                                                            expected = { success = success ; value = value ; } ;
-                                                                                                            observed = builtins.tryEval ( _config.trip { expression = expression ; message = message ; uuid = uuid ; } ) ;
+                                                                                                            eval = builtins.tryEval ( _config.trip { message = message ; uuid = uuid ; } ) ;
                                                                                                             in
-                                                                                                                if expected == observed then ""
-                                                                                                                else ''failure 7315078372437204'' ;
+                                                                                                                if eval.success then ''failure 7315078372437204''
+                                                                                                                else "" ;
                                                                                                 }
                                                                                         )
                                                                                     ] ;
