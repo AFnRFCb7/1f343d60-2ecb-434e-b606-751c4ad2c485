@@ -22,7 +22,7 @@
                                                     _lib.mkOption
                                                         {
                                                             default =
-                                                                { message , uuid } :
+                                                                uuid :
                                                                     builtins.throw
                                                                         (
                                                                             builtins.toJSON
@@ -30,7 +30,7 @@
                                                                                     config.visitor
                                                                                         { default = path : value : { type = builtins.typeOf value ; path = path ; value = builtins.toString value ; } ; }
                                                                                         { lambda = path : value : { type = "lambda" ; path = path ; } ; }
-                                                                                        { uuid = uuid ; message = message ; }
+                                                                                        uuid
                                                                                 )
                                                                         ) ;
                                                             type = _lib.types.functionTo _lib.types.anything ;
@@ -54,6 +54,8 @@
                                                                             type = _lib.types.functionTo _lib.types.package ;
                                                                         } ;
                                                             } ,
+                                            nixosTest ,
+                                            obviated-by ,
                                             visitor ?
                                                 { lib , ... } :
                                                     let
@@ -66,12 +68,9 @@
                                                                             default = { ... } : { ... } : 8520609137972150 ;
                                                                             type = _lib.types.functionTo ( _lib.types.functionTo ( _lib.types.functionTo _lib.types.anything ) ) ;
                                                                         } ;
-                                                            } ,
-                                            nixosTest ,
-                                            obviated-by
+                                                            }
                                         } :
                                         {
-                                            message ,
                                             uuid
                                         } :
                                             {
@@ -96,7 +95,7 @@
                                                                                                     runtimeInputs = [ ( _config.failure { } ) ] ;
                                                                                                     text =
                                                                                                         let
-                                                                                                            eval = builtins.tryEval ( _config.trip { message = message ; uuid = uuid ; } ) ;
+                                                                                                            eval = builtins.tryEval ( _config.trip uuid ) ;
                                                                                                             in
                                                                                                                 if eval.success then ''failure 7315078372437204''
                                                                                                                 else "" ;
