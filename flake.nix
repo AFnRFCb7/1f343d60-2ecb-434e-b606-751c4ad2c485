@@ -33,7 +33,7 @@
                                                                                             (
                                                                                                 config.visitor
                                                                                                     { default = path : value : { type = builtins.typeOf value ; path = path ; value = builtins.toString value ; } ; }
-                                                                                                    { lambda = { type = "lambda" ; path = path ; } ; }
+                                                                                                    { lambda = path : value : { type = "lambda" ; path = path ; } ; }
                                                                                                     { uuid = uuid ; message = message ; }
                                                                                             )
                                                                                     ) ;
