@@ -12,11 +12,10 @@
                     } :
                         let
                             implementation =
-                                { config , lib , pkgs , ... } :
+                                { config , lib , ... } :
                                     let
                                         _config = config-identity config ;
                                         _lib = lib-identity lib ;
-                                        _pkgs = pkgs-identity pkgs ;
                                         in
                                             {
                                                 options.trip =
@@ -47,9 +46,10 @@
                                     check =
                                         {
                                             failure ?
-                                                { lib , ... } :
+                                                { lib , pkgs , ... } :
                                                     let
                                                         _lib = lib-identity lib ;
+                                                        _pkgs = pkgs-identity pkgs ;
                                                         in
                                                             {
                                                                 options.failure =
