@@ -12,30 +12,34 @@
                         let
                             implementation =
                                 { config , lib , ... } :
-                                    {
-                                        options.trip =
-                                            _lib.mkOption
-                                                {
-                                                    default =
-                                                        { expression , message , uuid } :
-                                                            let
-                                                                eval = builtins.tryEval expression ;
-                                                                in
-                                                                    if eval.success then eval.value
-                                                                    else
-                                                                        builtins.throw
-                                                                            (
-                                                                                builtins.toJSON
+                                    let
+                                        _config = config-identity config ;
+                                        _lib = lib-identity lib ;
+                                        in
+                                            {
+                                                options.trip =
+                                                    _lib.mkOption
+                                                        {
+                                                            default =
+                                                                { expression , message , uuid } :
+                                                                    let
+                                                                        eval = builtins.tryEval expression ;
+                                                                        in
+                                                                            if eval.success then eval.value
+                                                                            else
+                                                                                builtins.throw
                                                                                     (
-                                                                                        config.visitor
-                                                                                            { default = path : value : { type = builtins.typeOf value ; path = path ; value = builtins.toString value ; } ; }
-                                                                                            { lambda = { type = "lambda" ; path = path ; } ; }
-                                                                                            { uuid = uuid ; message = message ; }
-                                                                                    )
-                                                                            ) ;
-                                                    type = _lib.types.functionTo _lib.types.anything ;
-                                                } ;
-                                    } ;
+                                                                                        builtins.toJSON
+                                                                                            (
+                                                                                                config.visitor
+                                                                                                    { default = path : value : { type = builtins.typeOf value ; path = path ; value = builtins.toString value ; } ; }
+                                                                                                    { lambda = { type = "lambda" ; path = path ; } ; }
+                                                                                                    { uuid = uuid ; message = message ; }
+                                                                                            )
+                                                                                    ) ;
+                                                            type = _lib.types.functionTo _lib.types.anything ;
+                                                        } ;
+                                            } ;
                             in
                                 {
                                     check =
