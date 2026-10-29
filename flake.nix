@@ -39,7 +39,7 @@
                                     check =
                                         {
                                             failure ?
-                                                { lib , pkgs , ... } :
+                                                { lib , pkgs , ... } @module:
                                                     let
                                                         identified =
                                                             if builtins.typeOf input == "lambda" then input module
@@ -58,7 +58,7 @@
                                             nixosTest ,
                                             obviated-by ,
                                             visitor ?
-                                                { lib , ... } :
+                                                { lib , ... } @module :
                                                     let
                                                         identified =
                                                             if builtins.typeOf input == "lambda" then input module
@@ -85,7 +85,7 @@
                                                         {
                                                             name = "nixos-test" ;
                                                             nodes.client =
-                                                                { config , pkgs , ... } :
+                                                                { config , pkgs , ... } @module :
                                                                     let
                                                                         identified =
                                                                             if builtins.typeOf input == "lambda" then input module
