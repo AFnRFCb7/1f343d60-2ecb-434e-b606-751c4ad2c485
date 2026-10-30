@@ -67,7 +67,7 @@
                                                         in
                                                             with identified ;
                                                                 {
-                                                                    options.visitor =
+                                                                    options.trip =
                                                                         lib.mkOption
                                                                             {
                                                                                 default = { ... } : { ... } : 8520609137972150 ;
